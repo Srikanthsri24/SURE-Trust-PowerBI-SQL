@@ -1,0 +1,159 @@
+Profit & Loss = IF(Orders[Profit] > 0 , IF([Profit] = 0, "NO P & L", "Profit") , IF([Profit] < 0, "Loss"))
+
+Sum Loss = IF(Orders[Profit] < 0,"Loss")
+
+Sum Profit = IF(Orders[Profit] > 0,"Profit")
+
+Sum Profit = CALCULATE(SUM(Orders[Profit]), 'Orders'[P&L]="Profit")
+
+Profit & Loss = IF(Orders[Profit] > 0 , IF([Profit] = 0, "NO P & L", "Profit") , IF([Profit] < 0, "Loss"))
+
+Orders = COUNT(Orders[Order ID])
+
+Year Month = FORMAT([Order Date], "YYYY-MM")
+
+Financial Year = FORMAT([Order Date], "YY") (OR) Orders[Year-Month]
+
+Financial Year = IF(FORMAT([Order Date],"MM") in {"01","02","03"}, FORMAT([Order Date],"YY)-1) & FORMAT([Order Date],"YY") (OR) Orders[Year-Month]
+
+Financial Year = IF(FORMAT([Order Date],"MM") in {"01","02","03"}, 
+FORMAT([Order Date],"YY")-1 &"-"& FORMAT([Order Date],"YY"),
+FORMAT([Order Date],"YY")&"-"& FORMAT([Order Date],"YY")+1)
+ (OR) Orders[Year-Month]
+
+
+
+
+
+
+
+
+Conditional Column = Table.ReverseRows(#"Inserted Earliest")
+
+Custom Column = Table.TransformColumnTypes(#"Reversed Rows",{{"Custom Column",Int64.Type}})
+
+Order Date= Table.transformColumnTypes(#"Reversed Rows", {{"Custom Column",Int64.Type}})
+
+Ship Mode= Table.transformColumnTypes(#"Reversed Rows", {{"Custom Column",Int64.Type}})
+
+Ship Mode = Table.ReplaceValue(#"Changed Type2", "Standard Class", "Test Class",Replacer.ReplaceText, {"Ship Mode"})
+
+
+Pivot Function:-
+ID = Table.TransformColumnTypes(Source,{{"ID",Int64.Type}, {"None",type text}})
+
+Subject = table.TransformColumnTypes(#"Promoted Headers",{{"Name", type text}, {"Subject" type text}})
+
+First Name = Table.Pivot(Source, List.Distinct(Source[#"Field Name"]),"Field Name", "Field Value")
+
+table = Table.Pivot(Source, List.Distinct(Source[#"Field Name"]),"Field Name", "Field Value")
+
+table= #"Recorded Column2"[Row ID]
+
+Order Date = Table.SplitColumn(Table.TransformColumnTypes(#"Changed Type3",{{"Order Date", type text}}, "en-us"), "Order")
+
+Roll No: Table.Group(#"Changed Type", {"Roll No", "Name"}, {{"Marks",each List.Sum([Marks]), type nullable number}})
+
+Power query editor:
+transform:
+to table:
+table = List.Sum(#"Changed Type"[Marks])
+
+table = List.NonNullCount(Source[Name])
+
+Sales = Table.TransformColumns(#"Rounded Down",{{"Sales", each Number.Round(_, 1), Int64.Type}})
+
+Quantity = Table.TransformColumns(#"Renamed Columns",{{"Sales", each Number.Round(_,1), type number}})
+
+Quantity = Table.TransformColumns(#"Rounded Off1", {{"Quantity", Number.IsEven, type logical}})
+
+
+
+
+
+Avg Sales = AVERAGEX(Orders, VALUE(Orders[Sales]))
+--AVERAGE(Orders[Sales]))
+
+Avg Sales = AVERAGEX(Orders, VALUE(Orders[Sales]+VALUE(Orders[Profit]))
+
+Avg Sales = AVERAGE(Orders[Sales]+Orders[Profit])
+
+Sales duplicate = AVERAGEA([Sales])
+
+Total Sales = SUM(Orders[Sales])
+
+Min Sales = MIN([Sales])
+
+Distinct Orders = DISTINCTCOUNT(Orders[Order ID])
+
+Blanks = COUNTBLANK(Orders[Product ID])
+#Creating blanks and refresh fields and then take new measure : Blanks
+
+Product = PRODUCTX(Orders, Values([Sales])*0.01)
+#Product=sales*percentage
+
+Measure = CALCULATE(SUM(Orders[Sales]))
+
+Table = CALENDAR("01-01-2020","31-12-2022")
+
+Year = Year('Table'[Date])
+
+Day = day('Table'[Date])
+
+Quarter = QUARTER('Table'[Date])
+
+Weekday = WEEKDAY('Table'[Date],1)
+
+weekday = SWITCH(TRUE(),
+    WEEKDAY('Table'[Date],2) = 1, "Monday"
+    ,WEEKDAY('Table'[Date],2) = 2, "Tuesday"
+    ,WEEKDAY('Table'[Date],2) = 3, "Wednesday"
+    ,WEEKDAY('Table'[Date],2) = 4, "Thursday"
+    ,WEEKDAY('Table'[Date],2) = 5, "Friday"
+    ,WEEKDAY('Table'[Date],2) = 6, "Saturday"
+    ,WEEKDAY('Table'[Date],2) = 7, "Sunday"
+    ,
+    )
+
+Weekday t = FORMAT([Date],"dddd")
+
+Weekday t = FORMAT([Date],"ddd")
+
+Year month = FORMAT([Ship Date], "MM-YYYY")
+
+Year month = [Year]&"-"&[Month]
+
+Week num = WEEKNUM([Date])
+
+Date Function = Date([Year],[Month],[Day])
+
+Date Function = Date('Table'[Year value],'Table'[Month value],'Table'[Day value]+5)
+
+Working days to shipment = NETWORKDAYS([Order Date],[Ship Date])
+
+Today Function = TODAY()
+
+Now Function = Now()
+
+UTCNOW Funtion = UTCNOW()
+
+Year Funtion = YEARFRAC([Order Date],[Ship Date])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
